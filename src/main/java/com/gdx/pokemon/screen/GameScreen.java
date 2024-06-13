@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.gdx.pokemon.PokemonGame;
 import com.gdx.pokemon.controller.*;
+import com.gdx.pokemon.dialogue.ChoiceDialogueNode;
 import com.gdx.pokemon.dialogue.Dialogue;
 import com.gdx.pokemon.dialogue.LinearDialogueNode;
 import com.gdx.pokemon.model.Camera;
@@ -24,6 +25,7 @@ import com.gdx.pokemon.model.world.World;
 import com.gdx.pokemon.model.world.cutscene.CutsceneEvent;
 import com.gdx.pokemon.model.world.cutscene.CutscenePlayer;
 import com.gdx.pokemon.screen.renderer.EventQueueRenderer;
+import com.gdx.pokemon.screen.renderer.NameRenderer;
 import com.gdx.pokemon.screen.renderer.TileInfoRenderer;
 import com.gdx.pokemon.screen.renderer.WorldRenderer;
 import com.gdx.pokemon.screen.transition.FadeInTransition;
@@ -67,6 +69,7 @@ public class GameScreen extends AbstractScreen implements CutscenePlayer {
 	private WorldRenderer worldRenderer;
 	private EventQueueRenderer queueRenderer; // renders cutscenequeue
 	private TileInfoRenderer tileInfoRenderer;
+	private NameRenderer nameRenderer;
 	private boolean renderTileInfo = false;
 	
 	private int uiScale = 2;
@@ -126,6 +129,16 @@ public class GameScreen extends AbstractScreen implements CutscenePlayer {
 		udpClient.sendMessage(message);
 		world.addActor(player);
 
+//		PlayerActor player2 = new PlayerActor(world, 13, 3, animations, this);
+//		ChoiceDialogueNode node = new ChoiceDialogueNode("No", 0);
+//		Dialogue player2Dialogue = new Dialogue();
+//		node.addChoice("Yes", 0);
+//		player2Dialogue.addNode(node);
+//
+//		player2Dialogue.addNode(node);
+//
+//		player2.setDialogue(player2Dialogue);
+//		world.addActor(player2);
 
 		initUI();
 
@@ -149,6 +162,7 @@ public class GameScreen extends AbstractScreen implements CutscenePlayer {
 		worldRenderer = new WorldRenderer(getApp().getAssetManager(), world);
 		queueRenderer = new EventQueueRenderer(app.getSkin(), eventQueue);
 		tileInfoRenderer = new TileInfoRenderer(world, camera);
+		nameRenderer = new NameRenderer(world, camera);
 	}
 
 	public static GameScreen getInstance(PokemonGame app){
@@ -179,6 +193,10 @@ public class GameScreen extends AbstractScreen implements CutscenePlayer {
 
 	public void addNewPlayer(int x, int y, String playerID){
 		PlayerActor player2 = new PlayerActor(world, x, y, animations, this);
+		LinearDialogueNode node = new LinearDialogueNode("Do you want to fight?", 0);
+		Dialogue player2Dialogue = new Dialogue();
+		player2Dialogue.addNode(node);
+		player2.setDialogue(player2Dialogue);
 		world.addActor(player2);
 		players.put(playerID, player2);
 		TempController tempController = new TempController(player2, this.getApp());
@@ -237,6 +255,7 @@ public class GameScreen extends AbstractScreen implements CutscenePlayer {
 		if (renderTileInfo) {
 			tileInfoRenderer.render(batch, Gdx.input.getX(), Gdx.input.getY());
 		}
+		nameRenderer.render(batch, player.getWorldX(), player.getWorldY());
 		batch.end();
 		
 		uiStage.draw();
@@ -278,6 +297,8 @@ public class GameScreen extends AbstractScreen implements CutscenePlayer {
 		dialogueBox.setVisible(false);
 		
 		optionsBox = new OptionBox(getApp().getSkin());
+		optionsBox.addOption("Yes");
+		optionsBox.addOption("No");
 		optionsBox.setVisible(false);
 		
 		Table dialogTable = new Table();
