@@ -22,6 +22,9 @@ dependencies {
     implementation(files("./lib/gdx-tools.jar"))
     implementation(files("./lib/tween-engine-api.jar"))
     implementation(files("./lib/tween-engine-api-sources.jar"))
+    // https://mvnrepository.com/artifact/org.json/json
+    implementation("org.json:json:20240303")
+
 }
 
 tasks.test {
