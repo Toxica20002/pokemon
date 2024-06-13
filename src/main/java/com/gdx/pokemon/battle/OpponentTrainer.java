@@ -59,7 +59,18 @@ public class OpponentTrainer {
             int Special_Attack = randomPokemon.getSpAtk();
             int Special_Defence = randomPokemon.getSpDef();
             int Speed = randomPokemon.getSpeed();
-
+            Random random = new Random();
+            int randomEV = random.nextInt(2);
+            float EV;
+            if(randomEV == 0){
+                EV = 0.5f;
+            } else {
+                EV = 1f;
+            }
+            Defence = (int) (Defence * (1+ EV));
+            Special_Defence = (int) (Special_Defence * (1+ EV));
+            Special_Attack = (int) (Special_Attack * (1+ EV));
+            HP = (int) (HP * (1+ EV));
             opponentTrainer.addPokemon(Pokemon.generatePokemon(name,level,exp,HP,Attack,Defence,Special_Attack,Special_Defence,Speed, texture, app.getMoveDatabase()));
         }
 //        Texture bulbasaur = app.getAssetManager().get("res/graphics/pokemon/Bulbasaur.png", Texture.class);
