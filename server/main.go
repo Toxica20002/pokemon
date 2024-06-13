@@ -43,7 +43,7 @@ func handleClient(conn *net.UDPConn) {
 
 	ClientIP := addr.IP.String()
 	ClientPort := addr.Port
-
+	// fmt.Println(addr.String())
 	if parts[0] == "where" {
 		playerX := parts[1]
 		playerY := parts[2]
@@ -52,7 +52,7 @@ func handleClient(conn *net.UDPConn) {
 		clients[addr.String()] = ClientInfo{IP: ClientIP, Port: ClientPort, X: playerX, Y: playerY}
 		for clientAddr := range clients {
 			if clientAddr != addr.String() {
-				message := "where " + playerX + " " + playerY + " " + keyCodeUp + " " + keyCodeDown + " " + clientAddr
+				message := "where " + playerX + " " + playerY + " " + keyCodeUp + " " + keyCodeDown + " " + addr.String()
 				udpClientAddr, _ := net.ResolveUDPAddr("udp", clientAddr)
 				_, err := conn.WriteToUDP([]byte(message), udpClientAddr)
 				if err != nil {
@@ -72,11 +72,17 @@ func handleClient(conn *net.UDPConn) {
 
 		clients[addr.String()] = ClientInfo{IP: ClientIP, Port: ClientPort, X: playerX, Y: playerY}
 
+		returnMessage := "registered " + addr.String();
+		_, err := conn.WriteToUDP([]byte(returnMessage), addr)
+		if err != nil {
+			fmt.Println("Error: ", err)
+		}
+
 		time.Sleep(2 * time.Second)
 
 		for clientAddr := range clients {
 			if clientAddr != addr.String() {
-				message := "newplayer " + playerX + " " + playerY + " " + clientAddr
+				message := "newplayer " + playerX + " " + playerY + " " + clientAddr + " " + addr.String()
 				udpClientAddr, _ := net.ResolveUDPAddr("udp", clientAddr)
 				_, err := conn.WriteToUDP([]byte(message), udpClientAddr)
 				if err != nil {
@@ -87,7 +93,7 @@ func handleClient(conn *net.UDPConn) {
 
 		for clientAddr := range clients {
 			if clientAddr != addr.String() {
-				message := "newplayer " + clients[clientAddr].X + " " + clients[clientAddr].Y + " " + addr.String()
+				message := "newplayer " + clients[clientAddr].X + " " + clients[clientAddr].Y + " " + addr.String() + " " + clientAddr
 				udpClientAddr, _ := net.ResolveUDPAddr("udp", addr.String())
 				_, err := conn.WriteToUDP([]byte(message), udpClientAddr)
 				if err != nil {
@@ -95,7 +101,24 @@ func handleClient(conn *net.UDPConn) {
 				}
 			}
 		}
-	
+
+	} else if parts[0] == "battle" {
+		opponentAddr := parts[1]
+		message := "ask " + addr.String()
+		udpClientAddr, _ := net.ResolveUDPAddr("udp", opponentAddr)
+		_, err := conn.WriteToUDP([]byte(message), udpClientAddr)
+		if err != nil {
+			fmt.Println("Error: ", err)
+		}
+	} else if parts[0] == "responsebattle" {
+		oppenentAddr := parts[1]
+		response := parts[2]
+		message := "responsebattle " + addr.String() + " " + response
+		udpClientAddr, _ := net.ResolveUDPAddr("udp", oppenentAddr)
+		_, err := conn.WriteToUDP([]byte(message), udpClientAddr)
+		if err != nil {
+			fmt.Println("Error: ", err)
+		}
 	}
 }
 

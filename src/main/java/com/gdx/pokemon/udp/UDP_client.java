@@ -51,8 +51,9 @@ public class UDP_client {
         if(Objects.equals(parts[0], "newplayer")){
             int x = Integer.parseInt(parts[1]);
             int y = Integer.parseInt(parts[2]);
-            String playerID = parts[3];
-            GameScreen.getInstance().addNewPlayer(x, y, playerID);
+            String playerID = parts[4];
+
+            GameScreen.getInstance().addNewPlayer(x, y, playerID, playerID);
         }
         else if (Objects.equals(parts[0], "where")){
             int x = Integer.parseInt(parts[1]);
@@ -61,6 +62,16 @@ public class UDP_client {
             int keyCodeDown = Integer.parseInt(parts[4]);
             String playerID = parts[5];
             GameScreen.getInstance().updatePlayer(x, y, keyCodeUp, keyCodeDown, playerID);
+        }
+        else if(Objects.equals(parts[0], "ask")){
+            System.out.println(response);
+            String playerID = parts[1];
+            GameScreen.getInstance().battle(playerID);
+        }
+        else if(Objects.equals(parts[0], "responsebattle")){
+            String playerID = parts[1];
+            String responseBattle = parts[2];
+            GameScreen.getInstance().responseBattle(playerID, responseBattle);
         }
     }
 
@@ -111,6 +122,10 @@ public class UDP_client {
             }
         }
         return instance;
+    }
+
+    public int getPort() {
+        return socket.getLocalPort();
     }
 
 }

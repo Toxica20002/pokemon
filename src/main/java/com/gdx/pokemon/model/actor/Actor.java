@@ -44,8 +44,9 @@ public class Actor implements YSortable {
 	private AnimationSet animations;
 	
 	private Dialogue dialogue;
-	
-	public Actor(World world, int x, int y, AnimationSet animations) {
+	private String Address;
+
+	public Actor(World world, int x, int y, AnimationSet animations, String Address) {
 		this.observer = world;
 		this.world = world;
 		this.x = x;
@@ -57,6 +58,7 @@ public class Actor implements YSortable {
 		this.nextMode = MOVEMENT_MODE.WALKING;
 		this.state = MOVEMENT_STATE.STILL;
 		this.facing = DIRECTION.SOUTH;
+		this.Address = Address;
 	}
 	
 	public enum MOVEMENT_STATE {
@@ -369,5 +371,13 @@ public class Actor implements YSortable {
 	
 	public boolean isVisible() {
 		return visible;
+	}
+
+	public String getAddress() {
+		return Address;
+	}
+
+	public void setAddress(String address) {
+		Address = address;
 	}
 }

@@ -6,6 +6,8 @@ import com.gdx.pokemon.dialogue.Dialogue;
 import com.gdx.pokemon.model.DIRECTION;
 import com.gdx.pokemon.model.Tile;
 import com.gdx.pokemon.model.actor.Actor;
+import com.gdx.pokemon.udp.UDP_client;
+import org.lwjgl.Sys;
 
 /**
  * Controller that interacts with what is in front of the player Actor.
@@ -30,6 +32,10 @@ public class InteractionController extends InputAdapter {
 				Actor targetActor = target.getActor();
 				if (targetActor.getDialogue() != null) {
 					if (targetActor.refaceWithoutAnimation(DIRECTION.getOpposite(a.getFacing()))){
+						UDP_client udp = UDP_client.getInstance();
+						String message= "battle " + targetActor.getAddress() + " ";
+
+						udp.sendMessage(message);
 						Dialogue dialogue = targetActor.getDialogue();
 						dialogueController.startDialogue(dialogue);
 					}

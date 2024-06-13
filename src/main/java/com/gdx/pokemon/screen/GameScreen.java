@@ -20,6 +20,8 @@ import com.gdx.pokemon.dialogue.Dialogue;
 import com.gdx.pokemon.dialogue.LinearDialogueNode;
 import com.gdx.pokemon.model.Camera;
 import com.gdx.pokemon.model.DIRECTION;
+import com.gdx.pokemon.model.Tile;
+import com.gdx.pokemon.model.actor.Actor;
 import com.gdx.pokemon.model.actor.PlayerActor;
 import com.gdx.pokemon.model.world.World;
 import com.gdx.pokemon.model.world.cutscene.CutsceneEvent;
@@ -85,6 +87,10 @@ public class GameScreen extends AbstractScreen implements CutscenePlayer {
 
 	private AnimationSet animations;
 
+	private boolean isBattle = false;
+
+	private String opponentAddress;
+
 	private GameScreen(PokemonGame app) {
 		super(app);
 		gameViewport = new ScreenViewport();
@@ -124,10 +130,11 @@ public class GameScreen extends AbstractScreen implements CutscenePlayer {
 		Random rand = new Random();
 		int x = rand.nextInt((16-13)+1)+13;
 		int y = rand.nextInt((7-3)+1)+3;
-		player = new PlayerActor(world, x, y, animations, this);
+		player = new PlayerActor(world, x, y, animations, this, null);
 		String message = "register " + player.getX() + " " + player.getY() + " ";
 		udpClient.sendMessage(message);
 		world.addActor(player);
+		System.out.println(udpClient.getPort());
 
 //		PlayerActor player2 = new PlayerActor(world, 13, 3, animations, this);
 //		ChoiceDialogueNode node = new ChoiceDialogueNode("No", 0);
@@ -191,8 +198,8 @@ public class GameScreen extends AbstractScreen implements CutscenePlayer {
 		
 	}
 
-	public void addNewPlayer(int x, int y, String playerID){
-		PlayerActor player2 = new PlayerActor(world, x, y, animations, this);
+	public void addNewPlayer(int x, int y, String playerID, String Address){
+		PlayerActor player2 = new PlayerActor(world, x, y, animations, this, Address);
 		LinearDialogueNode node = new LinearDialogueNode("Do you want to fight?", 0);
 		Dialogue player2Dialogue = new Dialogue();
 		player2Dialogue.addNode(node);
@@ -208,6 +215,42 @@ public class GameScreen extends AbstractScreen implements CutscenePlayer {
 			tempControllers.get(playerID).keyUp(keyCodeUp);
 			tempControllers.get(playerID).keyDown(keyCodeDown);
 		}
+	}
+
+	public void battle (String playerID){
+		opponentAddress = playerID;
+		isBattle = true;
+		Tile target = player.getWorld().getMap().getTile(player.getX()+player.getFacing().getDX(), player.getY()+player.getFacing().getDY());
+		if (target.getActor() != null) {
+			Actor targetActor = target.getActor();
+
+			if (targetActor.getDialogue() != null) {
+				if (targetActor.refaceWithoutAnimation(DIRECTION.getOpposite(player.getFacing()))){
+					optionsBox.setVisible(true);
+					Dialogue dialogue = targetActor.getDialogue();
+					dialogueController.startDialogue(dialogue);
+				}
+			}
+		}
+	}
+
+	public void responseBattle(String playerID, String responseBattle){
+		disableDialogue();
+		System.out.println(responseBattle);
+	}
+
+	public void response(){
+		if (isBattle){
+			isBattle = false;
+//			System.out.println(dialogueController.getAnswer());
+			String messsage = "responsebattle " + opponentAddress + " " + dialogueController.getAnswer() + " ";
+			udpClient.sendMessage(messsage);
+		}
+
+	}
+
+	public void disableDialogue() {
+		dialogueController.disableDialogue();
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package com.gdx.pokemon.controller;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.gdx.pokemon.dialogue.*;
+import com.gdx.pokemon.screen.GameScreen;
 import com.gdx.pokemon.ui.DialogueBox;
 import com.gdx.pokemon.ui.OptionBox;
 
@@ -16,7 +17,8 @@ public class DialogueController extends InputAdapter {
 	private DialogueTraverser traverser;
 	private DialogueBox dialogueBox;
 	private OptionBox optionBox;
-	
+	private String answer = null;
+
 	public DialogueController(DialogueBox box, OptionBox optionBox) {
 		this.dialogueBox = box;
 		this.optionBox = optionBox;
@@ -34,10 +36,19 @@ public class DialogueController extends InputAdapter {
 	public boolean keyUp(int keycode) {
 		if (optionBox.isVisible()) {
 			if (keycode == Keys.UP) {
+				//System.out.println("up");
 				optionBox.moveUp();
 				return true;
 			} else if (keycode == Keys.DOWN) {
+				//System.out.println("down");
 				optionBox.moveDown();
+				return true;
+			} else if (keycode == Keys.X) {
+				optionBox.setVisible(false);
+//				System.out.println(optionBox.getSelectedOption());
+				GameScreen.getInstance().disableDialogue();
+				answer = optionBox.getSelectedOption();
+				GameScreen.getInstance().response();
 				return true;
 			}
 		}
@@ -117,5 +128,14 @@ public class DialogueController extends InputAdapter {
 	
 	public boolean isDialogueShowing() {
 		return dialogueBox.isVisible();
+	}
+
+	public void disableDialogue() {
+		traverser = null;				// end dialogue
+		dialogueBox.setVisible(false);
+	}
+
+	public String getAnswer() {
+		return answer;
 	}
 }

@@ -97,4 +97,8 @@ public class OptionBox extends Table {
 	public int getAmount() {
 		return options.size();
 	}
+
+	public String getSelectedOption() {
+		return options.get(selectorIndex).getText().toString();
+	}
 }
