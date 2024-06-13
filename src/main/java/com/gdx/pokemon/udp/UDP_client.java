@@ -1,5 +1,6 @@
 package com.gdx.pokemon.udp;
 
+import com.gdx.pokemon.battle.BattleOnline;
 import com.gdx.pokemon.battle.OpponentTrainer;
 import com.gdx.pokemon.screen.GameScreen;
 
@@ -91,6 +92,19 @@ public class UDP_client {
             if (OpponentTrainer.getInstance().getPlayerTrainer().getTeamSize() == 2){
                 GameScreen.getInstance().startBattle(opponentID);
             }
+        }
+        else if (Objects.equals(parts[0], "input")){
+            String opponentAddr = parts[1];
+            int input = Integer.parseInt(parts[2]);
+            BattleOnline battleOnline = BattleOnline.getInstance();
+            battleOnline.setInput(input);
+        }
+        else if (Objects.equals(parts[0], "damage")){
+            String opponentAddr = parts[1];
+            int damage = Integer.parseInt(parts[2]);
+            System.out.println("Damage: " + damage);
+            BattleOnline battleOnline = BattleOnline.getInstance();
+            battleOnline.setDamage(damage);
         }
     }
 

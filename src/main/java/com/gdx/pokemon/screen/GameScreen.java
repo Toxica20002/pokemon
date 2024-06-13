@@ -91,6 +91,7 @@ public class GameScreen extends AbstractScreen implements CutscenePlayer {
 
 	private boolean isBattle = false;
 	private boolean isBattleStarted = false;
+	private boolean isBattleStarting = false;
 	private String opponentAddress;
 
 
@@ -228,6 +229,7 @@ public class GameScreen extends AbstractScreen implements CutscenePlayer {
 	}
 
 	public void startBattle(String opponentAddress) {
+		disableDialogue();
 		System.out.println("Battle started");
 		isBattleStarted = true;
 		BattleOnline battleOnline = BattleOnline.getInstance();
@@ -270,6 +272,7 @@ public class GameScreen extends AbstractScreen implements CutscenePlayer {
 
 	public void response(){
 		if (isBattle){
+			disableDialogue();
 			isBattle = false;
 //			System.out.println(dialogueController.getAnswer());
 			String ans = dialogueController.getAnswer();
@@ -329,6 +332,7 @@ public class GameScreen extends AbstractScreen implements CutscenePlayer {
 
 		if (isBattleStarted){
 			isBattleStarted = false;
+			isBattleStarting = true;
 			getApp().startTransition(
 					this,
 					this,
@@ -338,8 +342,13 @@ public class GameScreen extends AbstractScreen implements CutscenePlayer {
 						@Override
 						public void action() {
 							getApp().setScreen(getApp().createOnlineBattleScreen());
+							getApp().setGameScreen(GameScreen.getInstance());
 						}
 					});
+		}
+		else {
+			//getApp().setScreen(getApp().getGameScreen());
+			isBattleStarting = false;
 		}
 	}
 
@@ -461,5 +470,9 @@ public class GameScreen extends AbstractScreen implements CutscenePlayer {
 	@Override
 	public void queueEvent(CutsceneEvent event) {
 		eventQueue.add(event);
+	}
+
+	public boolean getIsBattleStarting(){
+		return isBattleStarting;
 	}
 }

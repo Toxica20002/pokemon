@@ -80,7 +80,7 @@ public class BattleScreen extends AbstractScreen implements BattleEventPlayer {
 
 		battle = new Battle(
 				playerTrainer,
-				opponentTrainer);
+				opponentTrainer, gameState);
 		battle.setEventPlayer(this);
 		animationPrimary = BATTLE_PARTY.PLAYER;
 		
@@ -90,8 +90,8 @@ public class BattleScreen extends AbstractScreen implements BattleEventPlayer {
 		
 		initUI();
 		
-		controller = new BattleScreenController(battle, queue, dialogueBox, moveSelectBox, optionBox);
-		
+		controller = new BattleScreenController(battle, queue, dialogueBox, moveSelectBox, optionBox, gameState);
+
 		battle.beginBattle();
 
 	}

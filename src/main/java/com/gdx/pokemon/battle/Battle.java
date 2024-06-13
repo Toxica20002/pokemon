@@ -30,7 +30,9 @@ public class Battle implements BattleEventQueuer {
 	private Trainer opponentTrainer;
 
 	private BattleEventPlayer eventPlayer; 
-	
+
+	private GameState gameState;
+
 	public Battle(Trainer player, Pokemon opponent) {
 		this.playerTrainer = player;
 		this.player = player.getPokemon(0);
@@ -39,13 +41,14 @@ public class Battle implements BattleEventQueuer {
 		this.state = STATE.READY_TO_PROGRESS;
 	}
 
-	public Battle(Trainer player, Trainer opponent) {
+	public Battle(Trainer player, Trainer opponent, GameState gameState) {
 		this.playerTrainer = player;
 		this.player = player.getPokemon(0);
 		this.opponentTrainer = opponent;
 		this.opponent = opponent.getPokemon(0);
 		mechanics = new BattleMechanics();
 		this.state = STATE.READY_TO_PROGRESS;
+		this.gameState = gameState;
 	}
 	
 	/**
@@ -77,7 +80,26 @@ public class Battle implements BattleEventQueuer {
 
 
 	}
-	
+
+	public void progressOffline(int input){
+		if (state != STATE.READY_TO_PROGRESS) {
+			return;
+		}
+		if (mechanics.goesFirst(player, opponent)) {
+			playTurn(BATTLE_PARTY.PLAYER, input);
+			if (state == STATE.READY_TO_PROGRESS) {
+				playTurn(BATTLE_PARTY.OPPONENT, 0);
+			}
+		} else {
+			playTurn(BATTLE_PARTY.OPPONENT, 0);
+			if (state == STATE.READY_TO_PROGRESS) {
+				playTurn(BATTLE_PARTY.PLAYER, input);
+			}
+		}
+		/*
+		 * XXX: Status effects go here.
+		 */
+	}
 	
 	/**
 	 * Progress the battle one turn. 
@@ -94,19 +116,33 @@ public class Battle implements BattleEventQueuer {
 			String message = "input " + input + " " + battleOnline.getOpponentAddress() + " ";
 			client.sendMessage(message);
 			if (state == STATE.READY_TO_PROGRESS) {
-				int tempInput;
-				do {
-					tempInput = battleOnline.getInput();
-				} while (tempInput == -1);
+				int tempInput = battleOnline.getInput();
+				long startTime = System.currentTimeMillis(); // fetch starting time
+				while((tempInput == -1) && ((System.currentTimeMillis()-startTime) < 10000))
+				{
+					try {
+						Thread.sleep(200); // Sleep for 200 milliseconds
+						tempInput = battleOnline.getInput();
+					} catch (InterruptedException e) {
+						Thread.currentThread().interrupt(); // Restore interrupted status
+					}
+				}
 				battleOnline.setInput(-1);
 				playTurn(BATTLE_PARTY.OPPONENT, tempInput);
 			}
 		} else {
 			BattleOnline battleOnline = BattleOnline.getInstance();
-			int tempInput;
-			do {
-				tempInput = battleOnline.getInput();
-			} while (tempInput == -1);
+			int tempInput = battleOnline.getInput();
+			long startTime = System.currentTimeMillis(); // fetch starting time
+			while((tempInput == -1) && ((System.currentTimeMillis()-startTime) < 10000))
+			{
+				try {
+					Thread.sleep(200); // Sleep for 200 milliseconds
+					tempInput = battleOnline.getInput();
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt(); // Restore interrupted status
+				}
+			}
 			battleOnline.setInput(-1);
 			playTurn(BATTLE_PARTY.OPPONENT, tempInput);
 			if (state == STATE.READY_TO_PROGRESS) {
@@ -185,7 +221,7 @@ public class Battle implements BattleEventQueuer {
 		queueEvent(new TextEvent(pokeUser.getName()+" used\n"+move.getName().toUpperCase()+"!", 0.5f));
 		
 		if (mechanics.attemptHit(move, pokeUser, pokeTarget)) {
-			move.useMove(mechanics, pokeUser, pokeTarget, user, this, user);
+			move.useMove(mechanics, pokeUser, pokeTarget, user, this, user, gameState);
 		} else { // miss
 			/* Broadcast the text graphics */
 			queueEvent(new TextEvent(pokeUser.getName()+"'s\nattack missed!", 0.5f));

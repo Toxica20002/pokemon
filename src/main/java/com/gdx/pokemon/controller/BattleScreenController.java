@@ -3,6 +3,7 @@ package com.gdx.pokemon.controller;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.gdx.pokemon.battle.Battle;
+import com.gdx.pokemon.battle.GameState;
 import com.gdx.pokemon.battle.event.BattleEvent;
 import com.gdx.pokemon.battle.event.TextEvent;
 import com.gdx.pokemon.battle.moves.MoveSpecification;
@@ -30,13 +31,15 @@ public class BattleScreenController extends InputAdapter {
 	private DialogueBox dialogue;
 	private OptionBox optionBox;
 	private MoveSelectBox moveSelect;
-	
-	public BattleScreenController(Battle battle, Queue<BattleEvent> queue, DialogueBox dialogue, MoveSelectBox options, OptionBox optionBox) {
+	private GameState gameState;
+
+	public BattleScreenController(Battle battle, Queue<BattleEvent> queue, DialogueBox dialogue, MoveSelectBox options, OptionBox optionBox, GameState gameState) {
 		this.battle = battle;
 		this.queue = queue;
 		this.dialogue = dialogue;
 		this.moveSelect = options;
 		this.optionBox = optionBox;
+		this.gameState = gameState;
 	}
 	
 	@Override
@@ -76,7 +79,12 @@ public class BattleScreenController extends InputAdapter {
 				if (battle.getPlayerPokemon().getMove(selection) == null) {
 					queue.add(new TextEvent("No such move...", 0.5f));
 				} else {
-					battle.progress(moveSelect.getSelection());
+					if(gameState == GameState.OFFLINE){
+						battle.progressOffline(moveSelect.getSelection());
+					}
+					else{
+						battle.progress(moveSelect.getSelection());
+					}
 					endTurn();
 				}
 			} else if (keycode == Keys.UP) {

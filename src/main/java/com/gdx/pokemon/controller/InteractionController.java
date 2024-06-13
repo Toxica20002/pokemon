@@ -26,7 +26,8 @@ public class InteractionController extends InputAdapter {
 	
 	@Override
 	public boolean keyUp(int keycode) {
-		if (keycode == Keys.X) {
+
+		if (keycode == Keys.Y) {
 			Tile target = a.getWorld().getMap().getTile(a.getX()+a.getFacing().getDX(), a.getY()+a.getFacing().getDY());
 			if (target.getActor() != null) {
 				Actor targetActor = target.getActor();

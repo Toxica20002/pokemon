@@ -41,11 +41,13 @@ public class OpponentTrainer {
         Texture bulbasaur = app.getAssetManager().get("res/graphics/pokemon/Bulbasaur.png", Texture.class);
         Texture slowpoke = app.getAssetManager().get("res/graphics/pokemon/Slowpoke.png", Texture.class);
         Random random = new Random();
-        int randomInt = random.nextInt(3);
+        int randomInt = random.nextInt(2);
         if (randomInt == 0) {
-            opponentTrainer = new Trainer(Pokemon.generatePokemon("Bulba", bulbasaur, app.getMoveDatabase()));
+            Pokemon pokemon = Pokemon.generatePokemon("Bulbasaur", bulbasaur, app.getMoveDatabase());
+            opponentTrainer.addPokemon(pokemon);
         } else if(randomInt == 1) {
-            opponentTrainer = new Trainer(Pokemon.generatePokemon("Slowpoke", slowpoke, app.getMoveDatabase()));
+            Pokemon pokemon = Pokemon.generatePokemon("Slowpoke", slowpoke, app.getMoveDatabase());
+            opponentTrainer.addPokemon(pokemon);
         }
 //        } else if(randomInt == 2){
 //            opponentTrainer = new Trainer(Pokemon.generatePokemon("Charmander", charmander, app.getMoveDatabase()));

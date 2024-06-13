@@ -146,8 +146,8 @@ func handleClient(conn *net.UDPConn) {
 			fmt.Println("Error: ", err)
 		}
 	} else if parts[0] == "damage" {
-		opponentAddr := parts[1]
-		damage := parts[2]
+		opponentAddr := parts[2]
+		damage := parts[1]
 		message := "damage " + addr.String() + " " + damage
 		udpClientAddr, _ := net.ResolveUDPAddr("udp", opponentAddr)
 		_, err := conn.WriteToUDP([]byte(message), udpClientAddr)

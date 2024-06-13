@@ -3,6 +3,7 @@ package com.gdx.pokemon.battle.moves;
 import com.gdx.pokemon.battle.BATTLE_PARTY;
 import com.gdx.pokemon.battle.BattleMechanics;
 import com.gdx.pokemon.battle.BattleOnline;
+import com.gdx.pokemon.battle.GameState;
 import com.gdx.pokemon.battle.animation.BattleAnimation;
 import com.gdx.pokemon.battle.event.BattleEventQueuer;
 import com.gdx.pokemon.model.Pokemon;
@@ -25,18 +26,22 @@ public abstract class Move {
 		this.animationClass = animationClass;
 	}
 	
-	public int useMove(BattleMechanics mechanics, Pokemon user, Pokemon target, BATTLE_PARTY party, BattleEventQueuer broadcaster, BATTLE_PARTY userParty) {
+	public int useMove(BattleMechanics mechanics, Pokemon user, Pokemon target, BATTLE_PARTY party, BattleEventQueuer broadcaster, BATTLE_PARTY userParty, GameState gameState) {
 		int damage = mechanics.calculateDamage(this, user, target);
-		if (userParty == BATTLE_PARTY.PLAYER) {
+		if(gameState == GameState.OFFLINE){
 			target.applyDamage(damage);
-			BattleOnline battleOnline = BattleOnline.getInstance();
-			String address = battleOnline.getOpponentAddress();
-			UDP_client client = UDP_client.getInstance();
-			String message = "damage " + damage + " " + address + " ";
-			client.sendMessage(message);
 		} else {
-			BattleOnline battleOnline = BattleOnline.getInstance();
-			user.applyDamage(battleOnline.getDamage());
+			if (userParty == BATTLE_PARTY.PLAYER) {
+				target.applyDamage(damage);
+				BattleOnline battleOnline = BattleOnline.getInstance();
+				String address = battleOnline.getOpponentAddress();
+				UDP_client client = UDP_client.getInstance();
+				String message = "damage " + damage + " " + address + " ";
+				client.sendMessage(message);
+			} else {
+				BattleOnline battleOnline = BattleOnline.getInstance();
+				target.applyDamage(battleOnline.getDamage());
+			}
 		}
 		return damage;
 	}

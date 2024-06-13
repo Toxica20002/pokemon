@@ -154,6 +154,7 @@ public class PokemonGame extends Game {
 	public BattleScreen createOfflineBattleScreen() {
 		Trainer playerTrainer = PlayerTrainer.getInstance().getPlayerTrainer();
 		Trainer opponentTrainer;
+		OpponentTrainer.createInstance(this);
 		OpponentTrainer.getInstance().randomPokemon();
 		opponentTrainer = OpponentTrainer.getInstance().getPlayerTrainer();
 		return new BattleScreen(this, playerTrainer, opponentTrainer, GameState.OFFLINE);
@@ -198,6 +199,10 @@ public class PokemonGame extends Game {
 	
 	public GameScreen getGameScreen() {
 		return gameScreen;
+	}
+
+	public void setGameScreen(GameScreen gameScreen) {
+		this.gameScreen = gameScreen;
 	}
 	
 	public BattleScreen getBattleScreen() {

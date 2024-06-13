@@ -3,6 +3,7 @@ package com.gdx.pokemon.battle.moves;
 import com.badlogic.gdx.Gdx;
 import com.gdx.pokemon.battle.BATTLE_PARTY;
 import com.gdx.pokemon.battle.BattleMechanics;
+import com.gdx.pokemon.battle.GameState;
 import com.gdx.pokemon.battle.STAT;
 import com.gdx.pokemon.battle.animation.BattleAnimation;
 import com.gdx.pokemon.battle.animation.BlinkingAnimation;
@@ -44,9 +45,9 @@ public class DamageMove extends Move {
 	}
 	
 	@Override
-	public int useMove(BattleMechanics mechanics, Pokemon user, Pokemon target, BATTLE_PARTY party, BattleEventQueuer broadcaster, BATTLE_PARTY userParty) {
+	public int useMove(BattleMechanics mechanics, Pokemon user, Pokemon target, BATTLE_PARTY party, BattleEventQueuer broadcaster, BATTLE_PARTY userParty, GameState gameState) {
 		int hpBefore = target.getCurrentHitpoints();
-		int damage = super.useMove(mechanics, user, target, party, broadcaster, userParty);
+		int damage = super.useMove(mechanics, user, target, party, broadcaster, userParty, gameState);
 		
 		/* Broadcast animations */
 		broadcaster.queueEvent(new AnimationBattleEvent(party, animation()));
