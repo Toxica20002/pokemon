@@ -52,7 +52,7 @@ public class BattleRenderer {
 		TextureAtlas atlas = assetManager.get("res/graphics_packed/battle/battlepack.atlas", TextureAtlas.class);
 		background = atlas.findRegion("background");
 		platform = atlas.findRegion("platform");
-		pokemonTexture = assetManager.get("res/graphics/pokemon/bulbasaur.png", Texture.class);
+		pokemonTexture = assetManager.get("res/graphics/pokemon/Bulbasaur.png", Texture.class);
 	}
 	
 	/**

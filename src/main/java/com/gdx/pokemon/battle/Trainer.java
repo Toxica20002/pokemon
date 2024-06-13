@@ -15,7 +15,7 @@ public class Trainer {
 	}
 	
 	public boolean addPokemon(Pokemon pokemon) {
-		if (team.size() >= 6) {
+		if (team.size() >= 201) {
 			return false;
 		} else {
 			team.add(pokemon);
@@ -29,5 +29,9 @@ public class Trainer {
 	
 	public int getTeamSize() {
 		return team.size();
+	}
+
+	public void clearTeam() {
+		team.clear();
 	}
 }

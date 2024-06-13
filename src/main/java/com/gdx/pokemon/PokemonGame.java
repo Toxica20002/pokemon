@@ -12,6 +12,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.gdx.pokemon.battle.GameState;
+import com.gdx.pokemon.battle.OpponentTrainer;
+import com.gdx.pokemon.battle.PlayerTrainer;
+import com.gdx.pokemon.battle.Trainer;
 import com.gdx.pokemon.battle.animation.*;
 import com.gdx.pokemon.battle.moves.MoveDatabase;
 import com.gdx.pokemon.model.world.World;
@@ -104,9 +108,9 @@ public class PokemonGame extends Game {
 		assetManager.load("res/graphics_packed/tiles/tilepack.atlas", TextureAtlas.class);
 		assetManager.load("res/graphics_packed/ui/uipack.atlas", TextureAtlas.class);
 		assetManager.load("res/graphics_packed/battle/battlepack.atlas", TextureAtlas.class);
-		assetManager.load("res/graphics/pokemon/bulbasaur.png", Texture.class);
-		assetManager.load("res/graphics/pokemon/slowpoke.png", Texture.class);
-		
+		assetManager.load("res/graphics/pokemon/Bulbasaur.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Slowpoke.png", Texture.class);
+
 		for (int i = 0; i < 32; i++) {
 			assetManager.load("res/graphics/statuseffect/attack_"+i+".png", Texture.class);
 		}
@@ -136,13 +140,23 @@ public class PokemonGame extends Game {
 		moveDatabase = new MoveDatabase();
 		
 		gameScreen = GameScreen.getInstance(this);
-		battleScreen = new BattleScreen(this);
+		Trainer playerTrainer = PlayerTrainer.createInstance(this).getPlayerTrainer();
+		Trainer opponentTrainer;
+		OpponentTrainer.createInstance(this);
+		OpponentTrainer.getInstance().addPokemon("Bulbasaur");
+		OpponentTrainer.getInstance().addPokemon("Slowpoke");
+		opponentTrainer  = OpponentTrainer.getInstance().getPlayerTrainer();
+		battleScreen = new BattleScreen(this, playerTrainer, opponentTrainer, GameState.OFFLINE);
 		transitionScreen = new TransitionScreen(this);
 		this.setScreen(gameScreen);
 	}
 
 	public BattleScreen createNewBattleScreen() {
-		return new BattleScreen(this);
+		Trainer playerTrainer = PlayerTrainer.getInstance().getPlayerTrainer();
+		Trainer opponentTrainer;
+		OpponentTrainer.getInstance().randomPokemon();
+		opponentTrainer = OpponentTrainer.getInstance().getPlayerTrainer();
+		return new BattleScreen(this, playerTrainer, opponentTrainer, GameState.OFFLINE);
 	}
 
 	@Override

@@ -13,10 +13,8 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.gdx.pokemon.PokemonGame;
 import com.gdx.pokemon.Settings;
-import com.gdx.pokemon.battle.BATTLE_PARTY;
-import com.gdx.pokemon.battle.Battle;
+import com.gdx.pokemon.battle.*;
 import com.gdx.pokemon.battle.Battle.STATE;
-import com.gdx.pokemon.battle.Trainer;
 import com.gdx.pokemon.battle.animation.BattleAnimation;
 import com.gdx.pokemon.battle.event.BattleEvent;
 import com.gdx.pokemon.battle.event.BattleEventPlayer;
@@ -72,23 +70,14 @@ public class BattleScreen extends AbstractScreen implements BattleEventPlayer {
 	private boolean uiDebug = false;
 	private boolean battleDebug = true;
 
-	public BattleScreen(PokemonGame app) {
+	private GameState gameState;
+
+	public BattleScreen(PokemonGame app, Trainer playerTrainer, Trainer opponentTrainer, GameState gameState) {
 		super(app);
+		this.gameState = gameState;
 		gameViewport = new ScreenViewport();
 		batch = new SpriteBatch();
-		
-		Texture bulbasaur = app.getAssetManager().get("res/graphics/pokemon/bulbasaur.png", Texture.class);
-		Texture slowpoke = app.getAssetManager().get("res/graphics/pokemon/slowpoke.png", Texture.class);
-		
-		Trainer playerTrainer = new Trainer(Pokemon.generatePokemon("Bulba", bulbasaur, app.getMoveDatabase()));
-		playerTrainer.addPokemon(Pokemon.generatePokemon("Golem", slowpoke, app.getMoveDatabase()));
 
-		Trainer opponentTrainer = new Trainer(Pokemon.generatePokemon("Grimer", bulbasaur, app.getMoveDatabase()));
-		opponentTrainer.addPokemon(Pokemon.generatePokemon("Golem", slowpoke, app.getMoveDatabase()));
-
-//		battle = new Battle(
-//				playerTrainer,
-//				Pokemon.generatePokemon("Grimer", slowpoke, app.getMoveDatabase()));
 		battle = new Battle(
 				playerTrainer,
 				opponentTrainer);
@@ -104,6 +93,7 @@ public class BattleScreen extends AbstractScreen implements BattleEventPlayer {
 		controller = new BattleScreenController(battle, queue, dialogueBox, moveSelectBox, optionBox);
 		
 		battle.beginBattle();
+
 	}
 
 	@Override
@@ -152,6 +142,14 @@ public class BattleScreen extends AbstractScreen implements BattleEventPlayer {
 					controller.restartTurn();
 				} else if (battle.getState() == STATE.WIN) {
 					getApp().setScreen(getApp().getGameScreen());
+					if (gameState == GameState.OFFLINE){
+						Pokemon pokemon = battle.getOpponentPokemon();
+						PlayerTrainer.getInstance().addPokemon(pokemon);
+					} else {
+						int sumExpLose = OpponentTrainer.getInstance().sumAllExp();
+						sumExpLose/= 3;
+						PlayerTrainer.getInstance().increasePokemonExp(sumExpLose);
+					}
 				} else if (battle.getState() == STATE.LOSE) {
 					getApp().setScreen(getApp().getGameScreen());
 				} else if (battle.getState() == STATE.RAN) {

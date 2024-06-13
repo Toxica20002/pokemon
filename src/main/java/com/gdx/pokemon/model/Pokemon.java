@@ -19,6 +19,7 @@ public class Pokemon {
 	private String name;
 	
 	private int level;
+	private int exp;
 	
 	private Map<STAT, Integer> stats;
 	private int currentHitpoints;
@@ -34,6 +35,7 @@ public class Pokemon {
 		this.name = name;
 		this.image = image;
 		this.level = 5;
+		this.exp = 50;
 		
 		/* init all stats to 1 */
 		stats = new HashMap<STAT, Integer>();
@@ -42,6 +44,7 @@ public class Pokemon {
 		}
 		stats.put(STAT.HITPOINTS, 10);
 		currentHitpoints = stats.get(STAT.HITPOINTS);
+
 	}
 	
 	public Texture getSprite() {
@@ -113,5 +116,17 @@ public class Pokemon {
 		generated.setMove(3, moveDatabase.getMove(3));
 
 		return generated;
+	}
+
+	public void increaseExp(int iExp){
+		exp += iExp;
+		if (exp >= 100){
+			level++;
+			exp = 0;
+		}
+	}
+
+	public int getExp(){
+		return exp;
 	}
 }

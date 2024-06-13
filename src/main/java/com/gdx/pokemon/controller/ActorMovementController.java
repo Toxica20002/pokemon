@@ -136,9 +136,6 @@ public class ActorMovementController extends InputAdapter  {
 			Random random = new Random();
 			int randomNumber = random.nextInt(max - min + 1) + min;
 			if (randomNumber <= 10) {
-				System.out.println("You have encountered a wild Pokemon!");
-				//player.getWorld().getGame().setScreen(player.getWorld().getGame().getBattleScreen());
-				//PokemonGame.create().setScreen();
 				BattleScreen newBattleScreen = game.createNewBattleScreen();
 				game.setScreen(newBattleScreen);
 				directionPress[DIRECTION.NORTH.ordinal()] = false;
