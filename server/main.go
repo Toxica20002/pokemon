@@ -119,6 +119,41 @@ func handleClient(conn *net.UDPConn) {
 		if err != nil {
 			fmt.Println("Error: ", err)
 		}
+	} else if parts[0] == "pokemon" {
+		opponentAddr := parts[1]
+		name := parts[2]
+		level := parts[3]
+		exp := parts[4]
+		hp := parts[5]
+		attack := parts[6]
+		defense := parts[7]
+		special_attack := parts[8]
+		special_defense := parts[9]
+		speed := parts[10]
+		message := "pokemon " + addr.String() + " " + name + " " + level + " " + exp + " " + hp + " " + attack + " " + defense + " " + special_attack + " " + special_defense + " " + speed
+		udpClientAddr, _ := net.ResolveUDPAddr("udp", opponentAddr)
+		_, err := conn.WriteToUDP([]byte(message), udpClientAddr)
+		if err != nil {
+			fmt.Println("Error: ", err)
+		}
+	} else if parts[0] == "input" {
+		opponentAddr := parts[2]
+		input := parts[1]
+		message := "input " + addr.String() + " " + input
+		udpClientAddr, _ := net.ResolveUDPAddr("udp", opponentAddr)
+		_, err := conn.WriteToUDP([]byte(message), udpClientAddr)
+		if err != nil {
+			fmt.Println("Error: ", err)
+		}
+	} else if parts[0] == "damage" {
+		opponentAddr := parts[1]
+		damage := parts[2]
+		message := "damage " + addr.String() + " " + damage
+		udpClientAddr, _ := net.ResolveUDPAddr("udp", opponentAddr)
+		_, err := conn.WriteToUDP([]byte(message), udpClientAddr)
+		if err != nil {
+			fmt.Println("Error: ", err)
+		}
 	}
 }
 

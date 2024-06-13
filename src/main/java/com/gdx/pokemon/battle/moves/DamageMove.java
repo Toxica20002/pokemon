@@ -44,9 +44,9 @@ public class DamageMove extends Move {
 	}
 	
 	@Override
-	public int useMove(BattleMechanics mechanics, Pokemon user, Pokemon target, BATTLE_PARTY party, BattleEventQueuer broadcaster) {
+	public int useMove(BattleMechanics mechanics, Pokemon user, Pokemon target, BATTLE_PARTY party, BattleEventQueuer broadcaster, BATTLE_PARTY userParty) {
 		int hpBefore = target.getCurrentHitpoints();
-		int damage = super.useMove(mechanics, user, target, party, broadcaster);
+		int damage = super.useMove(mechanics, user, target, party, broadcaster, userParty);
 		
 		/* Broadcast animations */
 		broadcaster.queueEvent(new AnimationBattleEvent(party, animation()));

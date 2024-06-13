@@ -136,7 +136,7 @@ public class TempController   {
                 System.out.println("You have encountered a wild Pokemon!");
                 //player.getWorld().getGame().setScreen(player.getWorld().getGame().getBattleScreen());
                 //PokemonGame.create().setScreen();
-                BattleScreen newBattleScreen = game.createNewBattleScreen();
+                BattleScreen newBattleScreen = game.createOfflineBattleScreen();
                 game.setScreen(newBattleScreen);
                 directionPress[DIRECTION.NORTH.ordinal()] = false;
                 directionPress[DIRECTION.SOUTH.ordinal()] = false;

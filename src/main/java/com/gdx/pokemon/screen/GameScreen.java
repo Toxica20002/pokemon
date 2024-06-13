@@ -14,12 +14,14 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.gdx.pokemon.PokemonGame;
+import com.gdx.pokemon.battle.*;
 import com.gdx.pokemon.controller.*;
 import com.gdx.pokemon.dialogue.ChoiceDialogueNode;
 import com.gdx.pokemon.dialogue.Dialogue;
 import com.gdx.pokemon.dialogue.LinearDialogueNode;
 import com.gdx.pokemon.model.Camera;
 import com.gdx.pokemon.model.DIRECTION;
+import com.gdx.pokemon.model.Pokemon;
 import com.gdx.pokemon.model.Tile;
 import com.gdx.pokemon.model.actor.Actor;
 import com.gdx.pokemon.model.actor.PlayerActor;
@@ -88,8 +90,9 @@ public class GameScreen extends AbstractScreen implements CutscenePlayer {
 	private AnimationSet animations;
 
 	private boolean isBattle = false;
-
+	private boolean isBattleStarted = false;
 	private String opponentAddress;
+
 
 	private GameScreen(PokemonGame app) {
 		super(app);
@@ -136,16 +139,6 @@ public class GameScreen extends AbstractScreen implements CutscenePlayer {
 		world.addActor(player);
 		System.out.println(udpClient.getPort());
 
-//		PlayerActor player2 = new PlayerActor(world, 13, 3, animations, this);
-//		ChoiceDialogueNode node = new ChoiceDialogueNode("No", 0);
-//		Dialogue player2Dialogue = new Dialogue();
-//		node.addChoice("Yes", 0);
-//		player2Dialogue.addNode(node);
-//
-//		player2Dialogue.addNode(node);
-//
-//		player2.setDialogue(player2Dialogue);
-//		world.addActor(player2);
 
 		initUI();
 
@@ -234,17 +227,64 @@ public class GameScreen extends AbstractScreen implements CutscenePlayer {
 		}
 	}
 
-	public void responseBattle(String playerID, String responseBattle){
+	public void startBattle(String opponentAddress) {
+		System.out.println("Battle started");
+		isBattleStarted = true;
+		BattleOnline battleOnline = BattleOnline.getInstance();
+		battleOnline.setOpponentAddress(opponentAddress);
+//		OpponentTrainer opponentTrainer = OpponentTrainer.getInstance();
+//		Trainer playerTrainer = PlayerTrainer.getInstance().getPlayerTrainer();
+//		System.out.println(playerTrainer.getTeamSize());
+	}
+
+	private void sendPokemonInfo(Pokemon pokemon, String opponentAddress){
+		String name = pokemon.getName();
+		int level = pokemon.getLevel();
+		int exp = pokemon.getExp();
+		int HP = pokemon.getStat(STAT.HITPOINTS);
+		int Attack = pokemon.getStat(STAT.ATTACK);
+		int Defence = pokemon.getStat(STAT.DEFENCE);
+		int Special_Attack = pokemon.getStat(STAT.SPECIAL_ATTACK);
+		int Special_Defence = pokemon.getStat(STAT.SPECIAL_DEFENCE);
+		int Speed = pokemon.getStat(STAT.SPEED);
+		String msg = "pokemon " + opponentAddress + " " + name + " " + level + " " + exp + " " + HP + " " + Attack + " " + Defence + " " + Special_Attack + " " + Special_Defence + " " + Speed + " ";
+		udpClient.sendMessage(msg);
+	}
+
+	public void responseBattle(String opponentAddress, String responseBattle){
 		disableDialogue();
 		System.out.println(responseBattle);
+		if(responseBattle.equals("Yes")){
+			OpponentTrainer.createInstance(getApp());
+			OpponentTrainer.getInstance().clearTeam();
+			PlayerTrainer playerTrainer = PlayerTrainer.getInstance();
+			Pokemon pokemon = playerTrainer.getPlayerTrainer().getPokemon(0);
+			sendPokemonInfo(pokemon, opponentAddress);
+			pokemon = playerTrainer.getPlayerTrainer().getPokemon(1);
+			sendPokemonInfo(pokemon, opponentAddress);
+//			pokemon = playerTrainer.getPlayerTrainer().getPokemon(2);
+//			sendPokemonInfo(pokemon, opponentAddress);
+		}
+
 	}
 
 	public void response(){
 		if (isBattle){
 			isBattle = false;
 //			System.out.println(dialogueController.getAnswer());
-			String messsage = "responsebattle " + opponentAddress + " " + dialogueController.getAnswer() + " ";
+			String ans = dialogueController.getAnswer();
+			String messsage = "responsebattle " + opponentAddress + " " + ans + " ";
 			udpClient.sendMessage(messsage);
+
+			if (ans.equals("Yes")){
+				OpponentTrainer.createInstance(getApp());
+				OpponentTrainer.getInstance().clearTeam();
+				PlayerTrainer playerTrainer = PlayerTrainer.getInstance();
+				Pokemon pokemon = playerTrainer.getPlayerTrainer().getPokemon(0);
+				sendPokemonInfo(pokemon, opponentAddress);
+				pokemon = playerTrainer.getPlayerTrainer().getPokemon(1);
+				sendPokemonInfo(pokemon, opponentAddress);
+			}
 		}
 
 	}
@@ -286,6 +326,21 @@ public class GameScreen extends AbstractScreen implements CutscenePlayer {
 			world.update(delta);
 		}
 		uiStage.act(delta);
+
+		if (isBattleStarted){
+			isBattleStarted = false;
+			getApp().startTransition(
+					this,
+					this,
+					new FadeOutTransition(0.8f, Color.BLACK, getApp().getTweenManager(), getApp().getAssetManager()),
+					new FadeInTransition(0.8f, Color.BLACK, getApp().getTweenManager(), getApp().getAssetManager()),
+					new Action() {
+						@Override
+						public void action() {
+							getApp().setScreen(getApp().createOnlineBattleScreen());
+						}
+					});
+		}
 	}
 
 	@Override

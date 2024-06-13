@@ -2,9 +2,11 @@ package com.gdx.pokemon.battle.moves;
 
 import com.gdx.pokemon.battle.BATTLE_PARTY;
 import com.gdx.pokemon.battle.BattleMechanics;
+import com.gdx.pokemon.battle.BattleOnline;
 import com.gdx.pokemon.battle.animation.BattleAnimation;
 import com.gdx.pokemon.battle.event.BattleEventQueuer;
 import com.gdx.pokemon.model.Pokemon;
+import com.gdx.pokemon.udp.UDP_client;
 
 /**
  * Represents a move a pokemon can do in battle. 
@@ -23,9 +25,19 @@ public abstract class Move {
 		this.animationClass = animationClass;
 	}
 	
-	public int useMove(BattleMechanics mechanics, Pokemon user, Pokemon target, BATTLE_PARTY party, BattleEventQueuer broadcaster) {
+	public int useMove(BattleMechanics mechanics, Pokemon user, Pokemon target, BATTLE_PARTY party, BattleEventQueuer broadcaster, BATTLE_PARTY userParty) {
 		int damage = mechanics.calculateDamage(this, user, target);
-		target.applyDamage(damage);
+		if (userParty == BATTLE_PARTY.PLAYER) {
+			target.applyDamage(damage);
+			BattleOnline battleOnline = BattleOnline.getInstance();
+			String address = battleOnline.getOpponentAddress();
+			UDP_client client = UDP_client.getInstance();
+			String message = "damage " + damage + " " + address + " ";
+			client.sendMessage(message);
+		} else {
+			BattleOnline battleOnline = BattleOnline.getInstance();
+			user.applyDamage(battleOnline.getDamage());
+		}
 		return damage;
 	}
 	

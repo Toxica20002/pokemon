@@ -5,6 +5,7 @@ import com.gdx.pokemon.battle.animation.PokeballAnimation;
 import com.gdx.pokemon.battle.event.*;
 import com.gdx.pokemon.battle.moves.Move;
 import com.gdx.pokemon.model.Pokemon;
+import com.gdx.pokemon.udp.UDP_client;
 
 public class Battle implements BattleEventQueuer {
 	
@@ -87,14 +88,32 @@ public class Battle implements BattleEventQueuer {
 			return;
 		}
 		if (mechanics.goesFirst(player, opponent)) {
-			playTurn(BATTLE_PARTY.PLAYER, input);	
+			BattleOnline battleOnline = BattleOnline.getInstance();
+			playTurn(BATTLE_PARTY.PLAYER, input);
+			UDP_client client = UDP_client.getInstance();
+			String message = "input " + input + " " + battleOnline.getOpponentAddress() + " ";
+			client.sendMessage(message);
 			if (state == STATE.READY_TO_PROGRESS) {
-				playTurn(BATTLE_PARTY.OPPONENT, 0);
+				int tempInput;
+				do {
+					tempInput = battleOnline.getInput();
+				} while (tempInput == -1);
+				battleOnline.setInput(-1);
+				playTurn(BATTLE_PARTY.OPPONENT, tempInput);
 			}
 		} else {
-			playTurn(BATTLE_PARTY.OPPONENT, 0);
+			BattleOnline battleOnline = BattleOnline.getInstance();
+			int tempInput;
+			do {
+				tempInput = battleOnline.getInput();
+			} while (tempInput == -1);
+			battleOnline.setInput(-1);
+			playTurn(BATTLE_PARTY.OPPONENT, tempInput);
 			if (state == STATE.READY_TO_PROGRESS) {
 				playTurn(BATTLE_PARTY.PLAYER, input);
+				UDP_client client = UDP_client.getInstance();
+				String message = "input " + input + " " + battleOnline.getOpponentAddress() + " ";
+				client.sendMessage(message);
 			}
 		}
 		/*
@@ -166,7 +185,7 @@ public class Battle implements BattleEventQueuer {
 		queueEvent(new TextEvent(pokeUser.getName()+" used\n"+move.getName().toUpperCase()+"!", 0.5f));
 		
 		if (mechanics.attemptHit(move, pokeUser, pokeTarget)) {
-			move.useMove(mechanics, pokeUser, pokeTarget, user, this);
+			move.useMove(mechanics, pokeUser, pokeTarget, user, this, user);
 		} else { // miss
 			/* Broadcast the text graphics */
 			queueEvent(new TextEvent(pokeUser.getName()+"'s\nattack missed!", 0.5f));

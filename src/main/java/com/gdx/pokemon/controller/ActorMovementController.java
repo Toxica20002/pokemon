@@ -136,7 +136,7 @@ public class ActorMovementController extends InputAdapter  {
 			Random random = new Random();
 			int randomNumber = random.nextInt(max - min + 1) + min;
 			if (randomNumber <= 10) {
-				BattleScreen newBattleScreen = game.createNewBattleScreen();
+				BattleScreen newBattleScreen = game.createOfflineBattleScreen();
 				game.setScreen(newBattleScreen);
 				directionPress[DIRECTION.NORTH.ordinal()] = false;
 				directionPress[DIRECTION.SOUTH.ordinal()] = false;

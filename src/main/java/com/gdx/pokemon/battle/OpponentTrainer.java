@@ -15,6 +15,7 @@ public class OpponentTrainer {
 
     private OpponentTrainer(PokemonGame app) {
         this.app = app;
+        opponentTrainer = new Trainer();
         randomPokemon();
     }
 
@@ -59,6 +60,13 @@ public class OpponentTrainer {
         String path = "res/graphics/pokemon/" + name + ".png";
         Texture texture = app.getAssetManager().get(path, Texture.class);
         Pokemon pokemon = Pokemon.generatePokemon(name, texture, app.getMoveDatabase());
+        opponentTrainer.addPokemon(pokemon);
+    }
+
+    public void addPokemon(String name, int level, int exp, int HP, int Attack, int Defence, int Special_Attack, int Special_Defence, int Speed){
+        String path = "res/graphics/pokemon/" + name + ".png";
+        Texture texture = app.getAssetManager().get(path, Texture.class);
+        Pokemon pokemon = Pokemon.generatePokemon(name, level, exp, HP, Attack, Defence, Special_Attack, Special_Defence, Speed, texture, app.getMoveDatabase());
         opponentTrainer.addPokemon(pokemon);
     }
 

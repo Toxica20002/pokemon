@@ -1,5 +1,6 @@
 package com.gdx.pokemon.udp;
 
+import com.gdx.pokemon.battle.OpponentTrainer;
 import com.gdx.pokemon.screen.GameScreen;
 
 import java.net.DatagramPacket;
@@ -72,6 +73,24 @@ public class UDP_client {
             String playerID = parts[1];
             String responseBattle = parts[2];
             GameScreen.getInstance().responseBattle(playerID, responseBattle);
+        }
+        else if(Objects.equals(parts[0], "pokemon")){
+            String opponentID = parts[1];
+            String name = parts[2];
+            int level = Integer.parseInt(parts[3]);
+            int exp = Integer.parseInt(parts[4]);
+            int hp = Integer.parseInt(parts[5]);
+            int attack = Integer.parseInt(parts[6]);
+            int defense = Integer.parseInt(parts[7]);
+            int special_attack = Integer.parseInt(parts[8]);
+            int special_defense = Integer.parseInt(parts[9]);
+            int speed = Integer.parseInt(parts[10]);
+
+            OpponentTrainer.getInstance().addPokemon(name, level, exp, hp, attack, defense, special_attack, special_defense, speed);
+
+            if (OpponentTrainer.getInstance().getPlayerTrainer().getTeamSize() == 2){
+                GameScreen.getInstance().startBattle(opponentID);
+            }
         }
     }
 

@@ -10,8 +10,12 @@ public class Trainer {
 	private List<Pokemon> team;
 	
 	public Trainer(Pokemon pokemon) {
-		team = new ArrayList<Pokemon>();
+		team = new ArrayList<>();
 		team.add(pokemon);
+	}
+
+	public Trainer() {
+		team = new ArrayList<>();
 	}
 	
 	public boolean addPokemon(Pokemon pokemon) {

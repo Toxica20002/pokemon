@@ -5,6 +5,7 @@ import com.gdx.pokemon.battle.STAT;
 import com.gdx.pokemon.battle.moves.Move;
 import com.gdx.pokemon.battle.moves.MoveDatabase;
 import com.gdx.pokemon.battle.moves.MoveSpecification;
+import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +45,21 @@ public class Pokemon {
 		}
 		stats.put(STAT.HITPOINTS, 10);
 		currentHitpoints = stats.get(STAT.HITPOINTS);
+	}
 
+	public Pokemon(String name, int level, int exp, int HP, int Attack, int Defence, int Special_Attack, int Special_Defence, int Speed, Texture image){
+		this.name = name;
+		this.level = level;
+		this.exp = exp;
+		stats = new HashMap<>();
+		stats.put(STAT.HITPOINTS, HP);
+		stats.put(STAT.ATTACK, Attack);
+		stats.put(STAT.DEFENCE, Defence);
+		stats.put(STAT.SPECIAL_ATTACK, Special_Attack);
+		stats.put(STAT.SPECIAL_DEFENCE, Special_Defence);
+		stats.put(STAT.SPEED, Speed);
+		currentHitpoints = stats.get(STAT.HITPOINTS);
+		this.image = image;
 	}
 	
 	public Texture getSprite() {
@@ -110,6 +125,17 @@ public class Pokemon {
 	
 	public static Pokemon generatePokemon(String name, Texture sprite, MoveDatabase moveDatabase) {
 		Pokemon generated = new Pokemon(name, sprite);
+		generated.setMove(0, moveDatabase.getMove(0));
+		generated.setMove(1, moveDatabase.getMove(1));
+		generated.setMove(2, moveDatabase.getMove(2));
+		generated.setMove(3, moveDatabase.getMove(3));
+
+		return generated;
+	}
+
+	public static Pokemon generatePokemon(String name, int level, int exp, int HP, int Attack, int Defence, int Special_Attack, int Special_Defence, int Speed,
+										  Texture sprite, MoveDatabase moveDatabase){
+		Pokemon generated = new Pokemon(name, level, exp, HP, Attack, Defence, Special_Attack, Special_Defence, Speed, sprite);
 		generated.setMove(0, moveDatabase.getMove(0));
 		generated.setMove(1, moveDatabase.getMove(1));
 		generated.setMove(2, moveDatabase.getMove(2));

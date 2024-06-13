@@ -151,12 +151,21 @@ public class PokemonGame extends Game {
 		this.setScreen(gameScreen);
 	}
 
-	public BattleScreen createNewBattleScreen() {
+	public BattleScreen createOfflineBattleScreen() {
 		Trainer playerTrainer = PlayerTrainer.getInstance().getPlayerTrainer();
 		Trainer opponentTrainer;
 		OpponentTrainer.getInstance().randomPokemon();
 		opponentTrainer = OpponentTrainer.getInstance().getPlayerTrainer();
 		return new BattleScreen(this, playerTrainer, opponentTrainer, GameState.OFFLINE);
+	}
+
+	public BattleScreen createOnlineBattleScreen() {
+		Trainer playerTrainer = PlayerTrainer.getInstance().getPlayerTrainer();
+		Trainer opponentTrainer = OpponentTrainer.getInstance().getPlayerTrainer();
+		if (opponentTrainer == null) {
+			System.out.println("Opponent trainer is null");
+		}
+		return new BattleScreen(this, playerTrainer, opponentTrainer, GameState.ONLINE);
 	}
 
 	@Override
