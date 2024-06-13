@@ -108,8 +108,58 @@ public class PokemonGame extends Game {
 		assetManager.load("res/graphics_packed/tiles/tilepack.atlas", TextureAtlas.class);
 		assetManager.load("res/graphics_packed/ui/uipack.atlas", TextureAtlas.class);
 		assetManager.load("res/graphics_packed/battle/battlepack.atlas", TextureAtlas.class);
+
+		assetManager.load("res/graphics/pokemon/Arbok.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Beedrill.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Blastoise.png", Texture.class);
 		assetManager.load("res/graphics/pokemon/Bulbasaur.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Butterfree.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Caterpie.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Charizard.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Charmander.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Charmeleon.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Clefable.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Clefairy.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Diglett.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Ekans.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Fearow.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Gloom.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Golbat.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Ivysaur.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Jigglypuff.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Kakuna.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Metapod.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Nidoking.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Nidoqueen.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Nidoran.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/NidoranF.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Nidorina.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Nidorino.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Ninetales.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Oddish.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Paras.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Parasect.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Pidgeot.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Pidgeotto.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Pidgey.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Pikachu.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Raichu.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Raticate.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Rattata.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Sandshrew.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Sandslash.png", Texture.class);
 		assetManager.load("res/graphics/pokemon/Slowpoke.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Spearow.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Squirtle.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Venomoth.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Venonat.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Venusaur.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Vileplume.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Vulpix.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Wartortle.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Weedle.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Wigglytuff.png", Texture.class);
+		assetManager.load("res/graphics/pokemon/Zubat.png", Texture.class);
 
 		for (int i = 0; i < 32; i++) {
 			assetManager.load("res/graphics/statuseffect/attack_"+i+".png", Texture.class);
@@ -148,7 +198,7 @@ public class PokemonGame extends Game {
 		opponentTrainer  = OpponentTrainer.getInstance().getPlayerTrainer();
 		battleScreen = new BattleScreen(this, playerTrainer, opponentTrainer, GameState.OFFLINE);
 		transitionScreen = new TransitionScreen(this);
-		this.setScreen(gameScreen);
+		this.setScreen(battleScreen);
 	}
 
 	public BattleScreen createOfflineBattleScreen() {

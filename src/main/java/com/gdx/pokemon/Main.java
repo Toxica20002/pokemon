@@ -3,6 +3,7 @@ package com.gdx.pokemon;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.gdx.Json.readJson;
 
 public class Main {
 	
@@ -14,7 +15,7 @@ public class Main {
 		config.vSyncEnabled = false;
 		config.foregroundFPS = 200;
 		config.addIcon("res/graphics/pokeball_icon.png", Files.FileType.Local);
-
+		readJson json = new readJson();
 		new LwjglApplication(new PokemonGame(), config);
 	}
 

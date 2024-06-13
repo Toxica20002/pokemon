@@ -89,7 +89,7 @@ public class UDP_client {
 
             OpponentTrainer.getInstance().addPokemon(name, level, exp, hp, attack, defense, special_attack, special_defense, speed);
 
-            if (OpponentTrainer.getInstance().getPlayerTrainer().getTeamSize() == 2){
+            if (OpponentTrainer.getInstance().getPlayerTrainer().getTeamSize() == 3){
                 GameScreen.getInstance().startBattle(opponentID);
             }
         }

@@ -2,14 +2,14 @@ package com.gdx.Json;
 
 public class JsonPokemon {
     private String name;
-    private String Hp;
-    private String Atk;
-    private String Def;
-    private String SpAtk;
-    private String SpDef;
-    private String Speed;
+    private int Hp;
+    private int Atk;
+    private int Def;
+    private int SpAtk;
+    private int SpDef;
+    private int Speed;
 
-    public JsonPokemon(String name, String Hp, String Atk, String Def, String SpAtk, String SpDef, String Speed) {
+    public JsonPokemon(String name, int Hp, int Atk, int Def, int SpAtk, int SpDef, int Speed) {
         this.name = name;
         this.Hp = Hp;
         this.Atk = Atk;
@@ -27,51 +27,51 @@ public class JsonPokemon {
         this.name = name;
     }
 
-    public String getHp() {
+    public int getHp() {
         return Hp;
     }
 
-    public void setHp(String hp) {
+    public void setHp(int hp) {
         Hp = hp;
     }
 
-    public String getAtk() {
+    public int getAtk() {
         return Atk;
     }
 
-    public void setAtk(String atk) {
+    public void setAtk(int atk) {
         Atk = atk;
     }
 
-    public String getDef() {
+    public int getDef() {
         return Def;
     }
 
-    public void setDef(String def) {
+    public void setDef(int def) {
         Def = def;
     }
 
-    public String getSpAtk() {
+    public int getSpAtk() {
         return SpAtk;
     }
 
-    public void setSpAtk(String spAtk) {
+    public void setSpAtk(int spAtk) {
         SpAtk = spAtk;
     }
 
-    public String getSpDef() {
+    public int getSpDef() {
         return SpDef;
     }
 
-    public void setSpDef(String spDef) {
+    public void setSpDef(int spDef) {
         SpDef = spDef;
     }
 
-    public String getSpeed() {
+    public int getSpeed() {
         return Speed;
     }
 
-    public void setSpeed(String speed) {
+    public void setSpeed(int speed) {
         Speed = speed;
     }
 }

@@ -264,8 +264,8 @@ public class GameScreen extends AbstractScreen implements CutscenePlayer {
 			sendPokemonInfo(pokemon, opponentAddress);
 			pokemon = playerTrainer.getPlayerTrainer().getPokemon(1);
 			sendPokemonInfo(pokemon, opponentAddress);
-//			pokemon = playerTrainer.getPlayerTrainer().getPokemon(2);
-//			sendPokemonInfo(pokemon, opponentAddress);
+			pokemon = playerTrainer.getPlayerTrainer().getPokemon(2);
+			sendPokemonInfo(pokemon, opponentAddress);
 		}
 
 	}
@@ -286,6 +286,8 @@ public class GameScreen extends AbstractScreen implements CutscenePlayer {
 				Pokemon pokemon = playerTrainer.getPlayerTrainer().getPokemon(0);
 				sendPokemonInfo(pokemon, opponentAddress);
 				pokemon = playerTrainer.getPlayerTrainer().getPokemon(1);
+				sendPokemonInfo(pokemon, opponentAddress);
+				pokemon = playerTrainer.getPlayerTrainer().getPokemon(2);
 				sendPokemonInfo(pokemon, opponentAddress);
 			}
 		}
