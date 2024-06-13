@@ -198,7 +198,7 @@ public class PokemonGame extends Game {
 		opponentTrainer  = OpponentTrainer.getInstance().getPlayerTrainer();
 		battleScreen = new BattleScreen(this, playerTrainer, opponentTrainer, GameState.OFFLINE);
 		transitionScreen = new TransitionScreen(this);
-		this.setScreen(battleScreen);
+		this.setScreen(gameScreen);
 	}
 
 	public BattleScreen createOfflineBattleScreen() {
