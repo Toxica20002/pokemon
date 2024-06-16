@@ -291,7 +291,7 @@
  },
  {
    "national_number": 29,
-   "english_name": "Nidoran♀",
+   "english_name": "Nidoran",
    "hp": 55,
    "attack": 47,
    "defense": 52,
@@ -328,16 +328,6 @@
    "sp_attack": 40,
    "sp_defense": 40,
    "speed": 50
- },
- {
-   "national_number": 33,
-   "english_name": "Nidorino",
-   "hp": 61,
-   "attack": 72,
-   "defense": 57,
-   "sp_attack": 55,
-   "sp_defense": 55,
-   "speed": 65
  },
  {
    "national_number": 34,

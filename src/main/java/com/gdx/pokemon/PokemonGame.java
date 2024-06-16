@@ -134,7 +134,7 @@ public class PokemonGame extends Game {
 		assetManager.load("res/graphics/pokemon/Nidoran.png", Texture.class);
 		assetManager.load("res/graphics/pokemon/NidoranF.png", Texture.class);
 		assetManager.load("res/graphics/pokemon/Nidorina.png", Texture.class);
-		assetManager.load("res/graphics/pokemon/Nidorino.png", Texture.class);
+//		assetManager.load("res/graphics/pokemon/Nidorino.png", Texture.class);
 		assetManager.load("res/graphics/pokemon/Ninetales.png", Texture.class);
 		assetManager.load("res/graphics/pokemon/Oddish.png", Texture.class);
 		assetManager.load("res/graphics/pokemon/Paras.png", Texture.class);

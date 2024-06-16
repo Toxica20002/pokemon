@@ -55,6 +55,7 @@ public class OpponentTrainer {
             int exp = 50;
             int HP = randomPokemon.getHp();
             int Attack = randomPokemon.getAtk();
+
             int Defence = randomPokemon.getDef();
             int Special_Attack = randomPokemon.getSpAtk();
             int Special_Defence = randomPokemon.getSpDef();
